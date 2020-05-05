@@ -1,8 +1,8 @@
-#include<WinSock2.h>  //À©µµ¿ì ±â¹İ ¼­¹ö ÇÁ·Î±×·¡¹ÖÀ» À§ÇÑ Çì´õ ÆÄÀÏ
+#include<WinSock2.h>  //ìœˆë„ìš° ê¸°ë°˜ ì„œë²„ í”„ë¡œê·¸ë˜ë°ì„ ìœ„í•œ í—¤ë” íŒŒì¼
 #include<stdio.h>
-#include<process.h> //½º·¹µå »ç¿ëÀ» À§ÇÑ Çì´õ ÆÄÀÏ
+#include<process.h> //ìŠ¤ë ˆë“œ ì‚¬ìš©ì„ ìœ„í•œ í—¤ë” íŒŒì¼
 #include<string.h>
-#pragma comment(lib,"ws2_32.lib") //À©µµ¿ì ±â¹İ ¼­¹ö ÇÁ·Î±×·¡¹ÖÀ» À§ÇÑ ¶óÀÌºê·¯¸® ÆÄÀÏ
+#pragma comment(lib,"ws2_32.lib") //ìœˆë„ìš° ê¸°ë°˜ ì„œë²„ í”„ë¡œê·¸ë˜ë°ì„ ìœ„í•œ ë¼ì´ë¸ŒëŸ¬ë¦¬ íŒŒì¼
 
 #define bufsize 1024
 #define PORT 9391
@@ -10,14 +10,14 @@
 int server_socket;
 char read_buf[bufsize];
 
-void read(void)  //¼Û¼ö½ÅÀ» µ¿½Ã¿¡ ÇÒ ¼ö ÀÖµµ·Ï ¼ö½Å¿¡ ½º·¹µå¸¦ È°¿ë
+void read(void)  //ì†¡ìˆ˜ì‹ ì„ ë™ì‹œì— í•  ìˆ˜ ìˆë„ë¡ ìˆ˜ì‹ ì— ìŠ¤ë ˆë“œë¥¼ í™œìš©
 {
 	while (1)
 	{
 		memset(read_buf, 0, bufsize);
 		recv(server_socket, read_buf, bufsize, 0);
 		printf("[server] : %s\n", read_buf);
-		if (strcmp(read_buf, "exit") == 0)  //exit ¼ö½Å½Ã ÇÁ·Î±×·¥ Á¾·á
+		if (strcmp(read_buf, "exit") == 0)  //exit ìˆ˜ì‹ ì‹œ í”„ë¡œê·¸ë¨ ì¢…ë£Œ
 			exit(0);
 	}
 }
@@ -27,14 +27,14 @@ int main()
 	WSADATA wsa;
 	char buf[bufsize];
 
-	/*À©µµ¿ì ¼ÒÄÏ °ü·Ã ¶óÀÌºê·¯¸®¸¦ »ç¿ëÇÏ±â À§ÇØ*/
-	if (WSAStartup(MAKEWORD(2, 2), &wsa)!=0) //2.2 ¹öÀü ½ÇÆĞÇÏ¸é 0ÀÌ ¾Æ´Ñ ¿¡·¯ÄÚµå °ª ¹İÈ¯
+	/*ìœˆë„ìš° ì†Œì¼“ ê´€ë ¨ ë¼ì´ë¸ŒëŸ¬ë¦¬ë¥¼ ì‚¬ìš©í•˜ê¸° ìœ„í•´*/
+	if (WSAStartup(MAKEWORD(2, 2), &wsa)!=0) //2.2 ë²„ì „ ì‹¤íŒ¨í•˜ë©´ 0ì´ ì•„ë‹Œ ì—ëŸ¬ì½”ë“œ ê°’ ë°˜í™˜
 	{
 		printf("not equal version\n");
 		return 0;
 	}
 
-	/*¼­¹ö¿¡ Á¢¼ÓÇÒ Å¬¶óÀÌ¾ğÆ® ¼ÒÄÏ °´Ã¼ »ı¼º*/
+	/*ì„œë²„ì— ì ‘ì†í•  í´ë¼ì´ì–¸íŠ¸ ì†Œì¼“ ê°ì²´ ìƒì„±*/
 	server_socket = socket(PF_INET, SOCK_STREAM, 0);
 	if (SOCKET_ERROR == server_socket)
 	{
@@ -42,33 +42,33 @@ int main()
 		return 0;
 	}
 
-	/*¼­¹öÀÇ ÁÖ¼Ò Á¤º¸ ´ëÀÔ*/
+	/*ì„œë²„ì˜ ì£¼ì†Œ ì •ë³´ ëŒ€ì…*/
 	SOCKADDR_IN server_addr;
-	memset(&server_addr, 0, sizeof(server_addr)); //¼­¹öÀÇ ÁÖ¼Ò°¡ ÀúÀåµÉ server_adress¸¦ 0À¸·Î ÃÊ±âÈ­
+	memset(&server_addr, 0, sizeof(server_addr)); //ì„œë²„ì˜ ì£¼ì†Œê°€ ì €ì¥ë  server_adressë¥¼ 0ìœ¼ë¡œ ì´ˆê¸°í™”
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_port = htons(PORT);
-	server_addr.sin_addr.S_un.S_addr = htonl(0x7f000001);//127.0.0.1 locallhost
+	server_addr.sin_addr.S_un.S_addr = htonl(0x7f000001);//127.0.0.1 localhost
 
-	/*¼­¹ö¿¡ Á¢¼Ó*/
+	/*ì„œë²„ì— ì ‘ì†*/
 	if (SOCKET_ERROR == connect(server_socket, (struct sockaddr*)& server_addr, sizeof(server_addr)))
 	{
 		printf("not connect\n");
 		return 0;
 	}
 
-	printf("Á¢¼Ó ¿Ï·á\n\n");
+	printf("ì ‘ì† ì™„ë£Œ\n\n");
 
-	/*¼ö½Å ½º·¹µå ½ÃÀÛ*/
+	/*ìˆ˜ì‹  ìŠ¤ë ˆë“œ ì‹œì‘*/
 	_beginthread(read, 0, (void*)1);
 
-	/*°è¼Ó Ã¤ÆÃÀ» ÇÒ ¼ö ÀÖµµ·Ï ÇÁ·Î±×·¥ÀÌ ³¡³ªÁö ¾Ê°Ô ¹«ÇÑ loop*/
-	while (1)//¼Û½ÅÀÇ ¿ªÇÒ
+	/*ê³„ì† ì±„íŒ…ì„ í•  ìˆ˜ ìˆë„ë¡ í”„ë¡œê·¸ë¨ì´ ëë‚˜ì§€ ì•Šê²Œ ë¬´í•œ loop*/
+	while (1)//ì†¡ì‹ ì˜ ì—­í• 
 	{
 		memset(buf, 0, bufsize);
 		gets(buf);
 		fflush(stdin);
 		send(server_socket, buf, sizeof(buf), 0);
-		if (strcmp(buf, "exit") == 0)  //exit ¼Û½Å½Ã ÇÁ·Î±×·¥ Á¾·á
+		if (strcmp(buf, "exit") == 0)  //exit ì†¡ì‹ ì‹œ í”„ë¡œê·¸ë¨ ì¢…ë£Œ
 			break;
 	}
 	closesocket(server_socket);
